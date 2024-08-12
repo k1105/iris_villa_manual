@@ -48,6 +48,26 @@ const TaskItem: React.FC<TaskItemProps> = ({
           margin: 10px 0;
           height: 200px;
         }
+
+        @media screen and (max-width: 600px) {
+          .main {
+            width: 95vw;
+            margin-bottom: 30px;
+          }
+
+          .taskContainer {
+            width: 60%;
+            height: 100%;
+            margin: 0;
+            h2 {
+              font-size: 1rem;
+              margin-bottom: 0.6rem;
+            }
+            p {
+              font-size: 0.9rem;
+            }
+          }
+        }
       `}</style>
     </div>
   );
