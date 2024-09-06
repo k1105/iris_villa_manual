@@ -16,26 +16,69 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Iris Villa</h1>
-        <div>
-          <Link href="./arrival">入山手順</Link>
+        <h1 className="headline">IRIS VILLA</h1>
+        <div className="option-container">
+          <div>
+            <Link href="./arrival" style={{ textDecoration: "none" }}>
+              <p className="option">入山手順</p>
+            </Link>
+          </div>
+          <div>
+            <Link href="./leaving" style={{ textDecoration: "none" }}>
+              <p className="option">下山手順</p>
+            </Link>
+          </div>
         </div>
-        <div>
-          <Link href="./leaving">下山手順</Link>
-        </div>
-        <div>
-          <h1>連絡先一覧</h1>
-          <ul>
-            <li>管理事務所</li>
-            <li>オーナー</li>
-            <li>近くの病院</li>
-            <li>
-              アイリスヴィラの住所: 501-5303 岐阜県郡上市高鷲町大鷲3330-282,
-              416, 310 アイリスヴィラ
-            </li>
-          </ul>
+        <div className="footer-link">
+          <Link href="/contact" style={{ textDecoration: "none" }}>
+            <p className="link">連絡先一覧</p>
+          </Link>
+          <Link href="/weather" style={{ textDecoration: "none" }}>
+            <p className="link">現地の天気</p>
+          </Link>
+          <Link href="/user-log" style={{ textDecoration: "none" }}>
+            <p className="link">利用者ログ</p>
+          </Link>
         </div>
       </main>
+      <style jsx>{`
+        .headline {
+          background: white;
+          text-align: center;
+          color: var(--secondary);
+          line-height: 40vh;
+          height: 40vh;
+        }
+
+        .option-container {
+          width: 90vw;
+          margin: 2rem auto;
+          display: flex;
+          flex-flow: column;
+          gap: 1rem;
+        }
+
+        .option {
+          color: black;
+          text-decoration: none;
+          font-size: 2rem;
+          font-weight: 600;
+        }
+
+        .footer-link {
+          position: fixed;
+          bottom: 3rem;
+          left: 0;
+          display: flex;
+          width: 90vw;
+          margin: 0 5vw;
+          justify-content: space-between;
+        }
+        .link {
+          font-weight: 600;
+          color: black;
+        }
+      `}</style>
     </>
   );
 }

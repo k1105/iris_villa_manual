@@ -1,12 +1,14 @@
 // pages/arrival/index.tsx
 import TaskList from "@/components/TaskList";
 import { NextPage } from "next";
+import Layout from "../layout";
 
 const Arrival: NextPage = () => {
   return (
     <>
-      <h1>入山手順</h1>
-      <TaskList filterQuery="arrival-leaving[contains]arrival" />
+      <Layout header="入山手順">
+        <TaskList arrivalLeaving="arrival" />
+      </Layout>
     </>
   );
 };

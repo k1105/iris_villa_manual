@@ -1,6 +1,8 @@
 import { client } from "@/libs/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TaskItem from "./TaskItem";
+import { Note } from "./Note";
+import { FinishMessage } from "./FinishMessage";
 
 interface Task {
   id: string;
@@ -10,13 +12,14 @@ interface Task {
   hat: string[];
   floor: string;
   category: string;
+  image: { url: string; height: number; width: number }[];
 }
 
 interface TaskListProps {
-  filterQuery: string;
+  arrivalLeaving: "arrival" | "leaving";
 }
 
-const TaskList: React.FC<TaskListProps> = ({ filterQuery }) => {
+const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,14 +29,17 @@ const TaskList: React.FC<TaskListProps> = ({ filterQuery }) => {
     const fetchTasks = async () => {
       const data = await client.get({
         endpoint: "task",
-        queries: { filters: filterQuery, limit: 100 },
+        queries: {
+          filters: `arrival-leaving[contains]${arrivalLeaving}`,
+          limit: 100,
+        },
       });
       setTasks(data.contents);
       setLoading(false);
     };
 
     fetchTasks();
-  }, [filterQuery]);
+  }, [arrivalLeaving]);
 
   useEffect(() => {
     if (hatFilter) {
@@ -69,31 +75,71 @@ const TaskList: React.FC<TaskListProps> = ({ filterQuery }) => {
 
   return (
     <div>
-      <div>
-        <a href="#" onClick={() => setHatFilter(null)}>
-          すべて ({getIncompleteCount(null)})
-        </a>{" "}
-        |{" "}
-        <a href="#" onClick={() => setHatFilter("母屋")}>
+      <div className="hat-filter-container">
+        <div
+          onClick={() => setHatFilter(null)}
+          className={`hat-filter ${hatFilter === null ? "selected" : ""}`}
+        >
+          <p>すべて ({getIncompleteCount(null)})</p>
+        </div>
+        <div
+          onClick={() => setHatFilter("母屋")}
+          className={`hat-filter ${hatFilter === "母屋" ? "selected" : ""}`}
+        >
           母屋 ({getIncompleteCount("母屋")})
-        </a>{" "}
-        |{" "}
-        <a href="#" onClick={() => setHatFilter("離れ")}>
+        </div>
+        <div
+          onClick={() => setHatFilter("離れ")}
+          className={`hat-filter ${hatFilter === "離れ" ? "selected" : ""}`}
+        >
           離れ ({getIncompleteCount("離れ")})
-        </a>
+        </div>
       </div>
-      {filteredTasks.length > 0 ? (
-        filteredTasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onComplete={handleComplete}
-            onPostpone={handlePostpone}
-          />
-        ))
-      ) : (
-        <div>すべてのタスクが完了しました。</div>
-      )}
+      <div className="container">
+        {filteredTasks.length > 0 ? (
+          filteredTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onComplete={handleComplete}
+              onPostpone={handlePostpone}
+            />
+          ))
+        ) : (
+          <FinishMessage arrivalLeaving={arrivalLeaving} />
+        )}
+      </div>
+      <Note />
+
+      <style jsx>{`
+        .container {
+          min-height: 55vh;
+        }
+
+        .hat-filter-container {
+          margin: 0 auto 20px;
+          width: 22rem;
+          display: flex;
+          align-item: center;
+          justify-content: space-between;
+        }
+
+        .hat-filter {
+          height: 2rem;
+          width: 7rem;
+          line-height: 2rem;
+          text-align: center;
+          border-radius: 1rem;
+          transition: all 0.5s ease;
+        }
+
+        .selected {
+          background-color: rgb(0 0 0 /0.1);
+        }
+
+        @media screen and (max-width: 600px) {
+        }
+      `}</style>
     </div>
   );
 };
