@@ -136,7 +136,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
           overflow-y: hidden;
           margin: 0 auto;
           border-radius: 5px;
-          padding: 10px 5px;
           transition: all 500ms ease;
         }
 
@@ -161,7 +160,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
         .task-container {
           width: 80%;
           margin: 10px 20px;
-          height: 60px;
+          height: 3rem;
+          line-height: 1.5rem;
           display: flex;
           gap: 1rem;
         }
@@ -223,7 +223,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           flex-flow: column;
           gap: 2rem;
           width: 80%;
-          margin: 0 auto 3rem;
+          margin: 0 auto 2rem;
         }
 
         .description {
@@ -254,7 +254,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           .task-container {
             width: 80%;
             height: 3rem;
-            margin: 0 5px 1rem;
+            margin: 1rem 5px;
             gap: 0.5rem;
           }
 
