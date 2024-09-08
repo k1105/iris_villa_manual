@@ -98,12 +98,14 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
       <div className="container">
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onComplete={handleComplete}
-              onPostpone={handlePostpone}
-            />
+            <div className="task-item-wrapper">
+              <TaskItem
+                key={task.id}
+                task={task}
+                onComplete={handleComplete}
+                onPostpone={handlePostpone}
+              />
+            </div>
           ))
         ) : (
           <FinishMessage arrivalLeaving={arrivalLeaving} />
@@ -114,6 +116,7 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
       <style jsx>{`
         .container {
           min-height: 55vh;
+          transition: all 500ms ease;
         }
 
         .hat-filter-container {

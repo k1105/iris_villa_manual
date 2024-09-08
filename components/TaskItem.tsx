@@ -27,6 +27,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onPostpone,
 }) => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [isChecked, setIsChecked] = useState<Boolean>(false);
   const [contentHeight, setContentHeight] = useState(0);
   const descriptionRef = useRef<HTMLDivElement>(null);
 
@@ -41,13 +42,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
   return (
     <div
-      className={`main ${isOpen ? "opened" : ""}`}
+      className={`main ${isOpen ? "opened" : ""} ${isChecked ? "checked" : ""}`}
       onClick={() => {
         setIsOpen(!isOpen);
       }}
     >
       <div className="headline">
-        <div className="taskContainer">
+        <div className="task-container">
           <div className="placeContainer">
             <p style={{ fontSize: "0.8rem" }}>{task.hat}</p>
             <p style={{ fontSize: "1.0rem", fontWeight: "600" }}>
@@ -62,19 +63,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
           <h2 className="taskName">{task.title}</h2>
           {/* <p>{task.description}</p> */}
           {/* あれば画像を表示 */}
-        </div>
-        <div className="buttonContainer">
-          <div onClick={() => onComplete(task.id)}>
-            <CheckIcon
-              style={{ fontSize: "1.5rem", color: "var(--secondary)" }}
-            />
-          </div>
-          <div
-            onClick={() => onPostpone(task.id)}
-            style={{ fontSize: "1.5rem", color: "var(--secondary)" }}
-          >
-            <SkipIcon />
-          </div>
         </div>
       </div>
       <div
@@ -96,6 +84,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
                     priority
                     style={{
                       objectFit: "contain", // or cover
+                      textAlign: "center",
                     }}
                   />
                 </div>
@@ -104,12 +93,39 @@ const TaskItem: React.FC<TaskItemProps> = ({
             return res;
           })()}
         </div>
+        <div className="button-container">
+          <div className="option-button-wrapper">
+            <div
+              onClick={() => {
+                setIsChecked(true);
+                setTimeout(() => {
+                  onComplete(task.id);
+                }, 400);
+              }}
+              className="option-button"
+            >
+              <CheckIcon style={{ fontSize: "1.5rem", marginTop: "0.75rem" }} />
+              <p>完了</p>
+            </div>
+          </div>
+          <div className="option-button-wrapper">
+            <div onClick={() => onPostpone(task.id)} className="option-button">
+              <SkipIcon
+                style={{
+                  fontSize: "1.5rem",
+                  marginTop: "0.75rem",
+                }}
+              />
+              <p>あとで</p>
+            </div>
+          </div>
+        </div>
         <div>
           <a
             href={`https://iris-villa.microcms.io/apis/task/${task.id}`}
-            className="micro-cms-link"
+            style={{ textDecoration: "none" }}
           >
-            内容を編集する(MicroCMSへ)
+            <p className="micro-cms-link">内容を編集する(MicroCMSへ)</p>
           </a>
         </div>
       </div>
@@ -117,8 +133,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
       <style jsx>{`
         .main {
           width: 60vw;
+          overflow-y: hidden;
           margin: 0 auto;
-          border-radius: 10px;
+          border-radius: 5px;
           padding: 10px 5px;
           transition: all 500ms ease;
         }
@@ -131,14 +148,19 @@ const TaskItem: React.FC<TaskItemProps> = ({
           background: white;
         }
 
+        .checked {
+          height: 0%;
+          padding: 0 5px;
+        }
+
         .placeContainer {
           width: 1.8rem;
           text-align: center;
         }
 
-        .taskContainer {
+        .task-container {
           width: 80%;
-          margin: 10px 0;
+          margin: 10px 20px;
           height: 60px;
           display: flex;
           gap: 1rem;
@@ -170,16 +192,32 @@ const TaskItem: React.FC<TaskItemProps> = ({
           width: 80%;
         }
 
-        .buttonContainer {
-          padding-top: 1rem;
+        .button-container {
+          padding-top: 0;
           display: flex;
           gap: 0.5rem;
+        }
+
+        .option-button-wrapper {
+          border: 1px solid var(--secondary);
+          width: 100%;
+          border-radius: 1.5rem;
+        }
+
+        .option-button {
+          margin: 0 auto;
+          width: 5rem;
+          display: flex;
+          height: 3rem;
+          line-height: 3rem;
+          gap: 0.5rem;
+          color: var(--secondary);
         }
 
         .description-container {
           overflow-y: hidden;
           transition: height 500ms ease;
-          margin-left: 3rem;
+          // margin-left: 3rem;
           display: flex;
           flex-flow: column;
           gap: 2rem;
@@ -190,10 +228,15 @@ const TaskItem: React.FC<TaskItemProps> = ({
           width: 400px;
         }
 
+        .micro-cms-link {
+          color: var(--secondary);
+          font-size: 0.8rem;
+        }
+
         @media screen and (max-width: 600px) {
           .main {
-            width: 90vw;
-            margin-bottom: 30px;
+            width: 95vw;
+            margin-bottom: 10px;
           }
 
           .taskName {
@@ -206,21 +249,28 @@ const TaskItem: React.FC<TaskItemProps> = ({
             width: 4px;
           }
 
-          .taskContainer {
+          .task-container {
             width: 80%;
             height: 3rem;
-            margin: 0;
+            margin: 0 5px 1rem;
             gap: 0.5rem;
+          }
+
+          .description-container {
+            margin: 0 auto 1rem;
+            width: 80vw;
+            gap: 1rem;
           }
 
           .description {
             font-size: 0.8rem;
             line-height: 1.2rem;
-            width: 80%;
+            width: 90%;
           }
 
           .image-wrapper {
-            max-height: 300px;
+            width: 80vw;
+            max-height: 250px;
           }
         }
       `}</style>

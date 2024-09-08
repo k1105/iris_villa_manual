@@ -38,6 +38,12 @@ export default function Layout({
           font-size: 0.8rem;
           color: rgb(0 0 0 /0.3);
         }
+
+        @media screen and (max-width: 600px) {
+          .header {
+            font-size: 1.2rem;
+          }
+        }
       `}</style>
     </div>
   );
