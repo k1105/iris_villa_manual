@@ -98,14 +98,12 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
       <div className="container">
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
-            <div className="task-item-wrapper">
-              <TaskItem
-                key={task.id}
-                task={task}
-                onComplete={handleComplete}
-                onPostpone={handlePostpone}
-              />
-            </div>
+            <TaskItem
+              key={task.id}
+              task={task}
+              onComplete={handleComplete}
+              onPostpone={handlePostpone}
+            />
           ))
         ) : (
           <FinishMessage arrivalLeaving={arrivalLeaving} />
