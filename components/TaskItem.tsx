@@ -94,7 +94,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           })()}
         </div>
         <div className="button-container">
-          <div className="option-button-wrapper">
+          <div className="option-button-wrapper bg-primary">
             <div
               onClick={() => {
                 setIsChecked(true);
@@ -108,7 +108,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <p>完了</p>
             </div>
           </div>
-          <div className="option-button-wrapper">
+          <div className="option-button-wrapper bg-secondary">
             <div onClick={() => onPostpone(task.id)} className="option-button">
               <SkipIcon
                 style={{
@@ -199,9 +199,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
         }
 
         .option-button-wrapper {
-          border: 1px solid var(--secondary);
           width: 100%;
           border-radius: 1.5rem;
+          font-weight: bold;
+          color: white;
         }
 
         .option-button {
@@ -211,7 +212,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           height: 3rem;
           line-height: 3rem;
           gap: 0.5rem;
-          color: var(--secondary);
+          color: black;
         }
 
         .description-container {
@@ -221,7 +222,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
           display: flex;
           flex-flow: column;
           gap: 2rem;
-          margin-bottom: 3rem;
+          width: 80%;
+          margin: 0 auto 3rem;
         }
 
         .description {
