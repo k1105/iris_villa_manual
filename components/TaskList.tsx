@@ -23,7 +23,11 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hatFilter, setHatFilter] = useState<string | null>(null);
+  const [hatFilter, setHatFilter] = useState<string>("母屋");
+  const [initialTaskCounts, setInitialTaskCounts] = useState<{
+    hanare: number;
+    omoya: number;
+  }>({ hanare: 0, omoya: 0 });
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -35,6 +39,19 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
         },
       });
       setTasks(data.contents);
+
+      // 各カテゴリごとの初期タスク数を設定
+      const hatOmoyaCount = data.contents.filter(
+        (task: Task) => task.hat[0] === "母屋"
+      ).length;
+      const hatHanareCount = data.contents.filter(
+        (task: Task) => task.hat[0] === "離れ"
+      ).length;
+
+      setInitialTaskCounts({
+        omoya: hatOmoyaCount,
+        hanare: hatHanareCount,
+      });
       setLoading(false);
     };
 
@@ -69,19 +86,31 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
     return tasks.filter((task) => task.hat[0] === hat).length;
   };
 
+  const getProgressBarWidth = () => {
+    const totalTasksForCurrentHat =
+      hatFilter === "離れ"
+        ? initialTaskCounts["hanare"]
+        : initialTaskCounts["omoya"]; // 現在のカテゴリに応じた初期タスク数
+
+    return (
+      (innerWidth * (totalTasksForCurrentHat - filteredTasks.length)) /
+      totalTasksForCurrentHat
+    );
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
+      <div
+        className="progress-bar"
+        style={{
+          width: `${getProgressBarWidth()}px`,
+        }}
+      ></div>
       <div className="hat-filter-container">
-        <div
-          onClick={() => setHatFilter(null)}
-          className={`hat-filter ${hatFilter === null ? "selected" : ""}`}
-        >
-          <p>すべて ({getIncompleteCount(null)})</p>
-        </div>
         <div
           onClick={() => setHatFilter("母屋")}
           className={`hat-filter ${hatFilter === "母屋" ? "selected" : ""}`}
@@ -117,9 +146,19 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
           transition: all 500ms ease;
         }
 
+        .progress-bar {
+          position: fixed;
+          z-index: 99;
+          top: 0;
+          left: 0;
+          height: 0.5rem;
+          background-color: var(--primary);
+          transition: all 0.5s ease;
+        }
+
         .hat-filter-container {
           margin: 0 auto 20px;
-          width: 22rem;
+          width: 15rem;
           display: flex;
           align-item: center;
           justify-content: space-between;
