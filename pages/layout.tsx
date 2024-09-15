@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Zen_Kaku_Gothic_New } from "next/font/google";
+
+const zenKakuBold = Zen_Kaku_Gothic_New({ weight: "700", subsets: ["latin"] });
 
 export default function Layout({
   header,
@@ -8,7 +11,7 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className={zenKakuBold.className}>
       <div>
         <Link href={"/"}>
           <p className="header">IRIS VILLA</p>

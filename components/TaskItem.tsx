@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { SkipIcon } from "./icons/SkipIcon";
 import { CheckIcon } from "./icons/CheckIcon";
 import Image from "next/image";
+import { Zen_Kaku_Gothic_New } from "next/font/google";
+
+const zenKaku = Zen_Kaku_Gothic_New({ weight: "500", subsets: ["latin"] });
 
 interface TaskItemProps {
   task: Task;
@@ -59,7 +62,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
         ref={descriptionRef}
         style={{ height: isOpen ? `${contentHeight}px` : "0px" }}
       >
-        <div className="description">{task.description}</div>
+        <div className={`description ${zenKaku.className}`}>
+          {task.description}
+        </div>
         <div className="images">
           {(() => {
             const res = [];
@@ -114,7 +119,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
             href={`https://iris-villa.microcms.io/apis/task/${task.id}`}
             style={{ textDecoration: "none" }}
           >
-            <p className="micro-cms-link">内容を編集する(MicroCMSへ)</p>
+            <p className={`micro-cms-link ${zenKaku.className}`}>
+              内容を編集する(MicroCMSへ)
+            </p>
           </a>
         </div>
       </div>
@@ -130,6 +137,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
         .headline {
           display: flex;
+          color: #333;
         }
 
         .opened {
