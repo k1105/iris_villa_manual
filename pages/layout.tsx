@@ -19,7 +19,7 @@ export default function Layout({
       <h2 className="footer">iris villa ver.beta</h2>
       <style jsx>{`
         .header {
-          position: fixed;
+          position: absolute;
           top: 30px;
           color: var(--secondary);
           font-weight: 600;
