@@ -4,17 +4,6 @@ import { SkipIcon } from "./icons/SkipIcon";
 import { CheckIcon } from "./icons/CheckIcon";
 import Image from "next/image";
 
-interface Task {
-  id: string;
-  number: string;
-  title: string;
-  description?: string;
-  hat: string[];
-  floor: string;
-  category: string;
-  image: { url: string; height: number; width: number }[];
-}
-
 interface TaskItemProps {
   task: Task;
   onComplete: (taskId: string) => void;

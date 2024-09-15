@@ -4,17 +4,6 @@ import TaskItem from "./TaskItem";
 import { Note } from "./Note";
 import { FinishMessage } from "./FinishMessage";
 
-interface Task {
-  id: string;
-  number: string;
-  title: string;
-  description?: string;
-  hat: string[];
-  floor: string;
-  category: string;
-  image: { url: string; height: number; width: number }[];
-}
-
 interface TaskListProps {
   arrivalLeaving: "arrival" | "leaving";
 }
