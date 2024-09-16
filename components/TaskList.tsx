@@ -1,7 +1,7 @@
 import { client } from "@/libs/client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TaskItem from "./TaskItem";
-import { Note } from "./Note";
+import CompletedTaskItem from "./CompletedTaskItem";
 import { FinishMessage } from "./FinishMessage";
 
 interface TaskListProps {
@@ -27,13 +27,19 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
           limit: 100,
         },
       });
-      setTasks(data.contents);
 
-      // 各カテゴリごとの初期タスク数を設定
-      const hatOmoyaCount = data.contents.filter(
+      // tasksにcompletedフラグを追加
+      const tasksWithCompleted = data.contents.map((task: Task) => ({
+        ...task,
+        completed: false, // 初期状態では未完了
+      }));
+
+      setTasks(tasksWithCompleted);
+
+      const hatOmoyaCount = tasksWithCompleted.filter(
         (task: Task) => task.hat[0] === "母屋"
       ).length;
-      const hatHanareCount = data.contents.filter(
+      const hatHanareCount = tasksWithCompleted.filter(
         (task: Task) => task.hat[0] === "離れ"
       ).length;
 
@@ -55,8 +61,21 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
     }
   }, [hatFilter, tasks]);
 
+  // タスクを完了にする処理
   const handleComplete = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, completed: true } : task
+      )
+    );
+  };
+
+  const handleRestore = (taskId: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, completed: false } : task
+      )
+    );
   };
 
   const handlePostpone = (taskId: string) => {
@@ -72,17 +91,23 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
     if (hat === null) {
       return tasks.length;
     }
-    return tasks.filter((task) => task.hat[0] === hat).length;
+    return tasks.filter((task) => task.hat[0] === hat && !task.completed)
+      .length;
   };
 
   const getProgressBarWidth = () => {
     const totalTasksForCurrentHat =
       hatFilter === "離れ"
         ? initialTaskCounts["hanare"]
-        : initialTaskCounts["omoya"]; // 現在のカテゴリに応じた初期タスク数
+        : initialTaskCounts["omoya"];
+
+    // 完了していないタスクの数を計算
+    const incompleteTasksForCurrentHat = filteredTasks.filter(
+      (task) => !task.completed
+    ).length;
 
     return (
-      (innerWidth * (totalTasksForCurrentHat - filteredTasks.length)) /
+      (innerWidth * (totalTasksForCurrentHat - incompleteTasksForCurrentHat)) /
       totalTasksForCurrentHat
     );
   };
@@ -115,19 +140,27 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
       </div>
       <div className="container">
         {filteredTasks.length > 0 ? (
-          filteredTasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onComplete={handleComplete}
-              onPostpone={handlePostpone}
-            />
-          ))
+          filteredTasks.map((task, index) => {
+            return task.completed ? (
+              <CompletedTaskItem
+                key={task.id}
+                task={task}
+                onRestore={handleRestore}
+              />
+            ) : (
+              <TaskItem
+                key={task.id}
+                task={task}
+                listIndex={index + 1}
+                onComplete={handleComplete}
+                onPostpone={handlePostpone}
+              />
+            );
+          })
         ) : (
           <FinishMessage arrivalLeaving={arrivalLeaving} />
         )}
       </div>
-      <Note />
 
       <style jsx>{`
         .container {
@@ -138,7 +171,7 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
         .progress-bar {
           position: fixed;
           z-index: 99;
-          top: 0;
+          bottom: 0;
           left: 0;
           height: 0.5rem;
           background-color: var(--primary);
@@ -163,7 +196,7 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
         }
 
         .selected {
-          background-color: rgb(0 0 0 /0.1);
+          background-color: rgb(0 0 0 / 0.1);
         }
 
         @media screen and (max-width: 600px) {

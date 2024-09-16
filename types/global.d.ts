@@ -6,4 +6,5 @@ interface Task {
   floor: string;
   category: string;
   image: { url: string; height: number; width: number }[];
+  completed: boolean;
 }

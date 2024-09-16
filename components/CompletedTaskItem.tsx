@@ -1,24 +1,13 @@
-// components/TaskItem.tsx
-import { useEffect, useRef, useState } from "react";
-import { SkipIcon } from "./icons/SkipIcon";
 import { CheckIcon } from "./icons/CheckIcon";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-const inter = Inter({ weight: "400", subsets: ["latin"] });
+import { useState, useEffect, useRef } from "react";
+import { FilledCheckIcon } from "./icons/FilledCheckIcon";
 
-interface TaskItemProps {
+type Props = {
   task: Task;
-  listIndex: number;
-  onComplete: (taskId: string) => void;
-  onPostpone: (taskId: string) => void;
-}
+  onRestore: (taskId: string) => void;
+};
 
-const TaskItem: React.FC<TaskItemProps> = ({
-  task,
-  listIndex,
-  onComplete,
-  onPostpone,
-}) => {
+const CompletedTaskItem = ({ task, onRestore }: Props) => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
   const [isChecked, setIsChecked] = useState<Boolean>(false);
   const [contentHeight, setContentHeight] = useState(0);
@@ -42,7 +31,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
     >
       <div className="headline">
         <div className="task-container">
-          <p className="list-index-container">{listIndex}</p>
+          <p className="list-index-container">
+            <FilledCheckIcon style={{ width: "2.05rem", height: "2.05rem" }} />
+          </p>
           <h2 className="taskName">{task.title}</h2>
         </div>
       </div>
@@ -51,73 +42,20 @@ const TaskItem: React.FC<TaskItemProps> = ({
         ref={descriptionRef}
         style={{ height: isOpen ? `${contentHeight}px` : "0px" }}
       >
-        <div className="place-container">
-          <p className="place-icon">場所</p>
-          <p className="place-name">
-            {task.hat} {task.floor}
-          </p>
-        </div>
-        <div className={`description ${inter.className}`}>
-          {task.description}
-        </div>
-        <div className="images">
-          {(() => {
-            const res = [];
-            for (const image of task.image) {
-              res.push(
-                <div className="image-wrapper">
-                  <Image
-                    src={image.url}
-                    alt={`${task.title}の説明画像`}
-                    fill
-                    priority
-                    style={{
-                      objectFit: "contain", // or cover
-                      textAlign: "center",
-                    }}
-                  />
-                </div>
-              );
-            }
-            return res;
-          })()}
-        </div>
         <div className="button-container">
-          <div className="option-button-wrapper bg-primary">
+          <div className="option-button-wrapper bg-secondary">
             <div
               onClick={() => {
                 setIsChecked(true);
                 setTimeout(() => {
-                  onComplete(task.id);
+                  onRestore(task.id);
                 }, 400);
               }}
               className="option-button"
             >
-              <CheckIcon style={{ fontSize: "1.5rem", marginTop: "0.75rem" }} />
-              <p>完了</p>
+              <p>完了前にもどす</p>
             </div>
           </div>
-          <div className="option-button-wrapper bg-secondary">
-            <div onClick={() => onPostpone(task.id)} className="option-button">
-              <SkipIcon
-                style={{
-                  fontSize: "1.5rem",
-                  marginTop: "0.75rem",
-                }}
-              />
-              <p>あとで</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <a
-            href={`https://iris-villa.microcms.io/apis/task/${task.id}`}
-            style={{ textDecoration: "none" }}
-          >
-            <p className={`micro-cms-link ${inter.className}`}>
-              内容を編集する(MicroCMSへ)
-            </p>
-          </a>
         </div>
       </div>
 
@@ -151,9 +89,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           width: 1.8rem;
           height: 1.8rem;
           line-height: 1.45rem;
-          border-radius: 0.9rem;
           color: var(--primary);
-          border: 2px solid var(--primary);
           text-align: center;
         }
 
@@ -186,6 +122,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           font-size: 1.2rem;
           font-weight: normal;
           width: 80%;
+          color: rgb(0 0 0 /0.3);
         }
 
         .button-container {
@@ -203,8 +140,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
         .option-button {
           margin: 0 auto;
-          width: 5rem;
+          width: 10rem;
           display: flex;
+          justify-content: center;
           height: 3rem;
           line-height: 3rem;
           gap: 0.5rem;
@@ -220,36 +158,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
           gap: 2rem;
           width: 80%;
           margin: 0 auto 2rem;
-        }
-
-        .place-container {
-          display: flex;
-          gap: 0.5rem;
-        }
-
-        .place-icon {
-          display: block;
-          width: 3rem;
-          height: 1.2rem;
-          line-height: 1.2rem;
-          text-align: center;
-          background-color: var(--primary);
-          color: white;
-          border-radius: 0.75rem;
-          font-size: 0.7rem;
-        }
-
-        .place-name {
-          font-size: 0.8rem;
-        }
-
-        .description {
-          width: 400px;
-        }
-
-        .micro-cms-link {
-          color: var(--secondary);
-          font-size: 0.8rem;
         }
 
         @media screen and (max-width: 600px) {
@@ -303,4 +211,4 @@ const TaskItem: React.FC<TaskItemProps> = ({
   );
 };
 
-export default TaskItem;
+export default CompletedTaskItem;
