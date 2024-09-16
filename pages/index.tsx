@@ -42,7 +42,7 @@ export default function Home() {
       </main>
       <style jsx>{`
         .headline {
-          background: white;
+          background: rgb(255 255 255 /0.5);
           text-align: center;
           color: var(--secondary);
           line-height: 40vh;

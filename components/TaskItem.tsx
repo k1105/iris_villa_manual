@@ -125,7 +125,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         .main {
           width: 60vw;
           overflow-y: hidden;
-          margin: 0 auto;
+          margin: 0 auto 1rem;
           border-radius: 5px;
           transition: all 500ms ease;
         }
@@ -138,7 +138,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         .opened {
           background: white;
           .task-container {
-            margin: 3rem auto;
+            margin: 3rem auto 0;
           }
         }
 
@@ -294,7 +294,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
           .opened {
             .task-container {
-              margin: 1rem auto;
+              margin: 1rem auto 0;
             }
           }
         }

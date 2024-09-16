@@ -63,7 +63,7 @@ const CompletedTaskItem = ({ task, onRestore }: Props) => {
         .main {
           width: 60vw;
           overflow-y: hidden;
-          margin: 0 auto;
+          margin: 0 auto 1rem;
           border-radius: 5px;
           transition: all 500ms ease;
         }
