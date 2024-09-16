@@ -139,7 +139,7 @@ const TaskList: React.FC<TaskListProps> = ({ arrivalLeaving }) => {
         </div>
       </div>
       <div className="container">
-        {filteredTasks.length > 0 ? (
+        {filteredTasks.filter((task) => !task.completed).length > 0 ? (
           filteredTasks.map((task, index) => {
             return task.completed ? (
               <CompletedTaskItem
