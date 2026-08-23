@@ -1,13 +1,12 @@
-import { CheckIcon } from "./icons/CheckIcon";
-import { useState, useEffect, useRef } from "react";
-import { FilledCheckIcon } from "./icons/FilledCheckIcon";
+import {useState, useEffect, useRef} from "react";
+import {FilledCheckIcon} from "./icons/FilledCheckIcon";
 
 type Props = {
   task: Task;
   onRestore: (taskId: string) => void;
 };
 
-const CompletedTaskItem = ({ task, onRestore }: Props) => {
+const CompletedTaskItem = ({task, onRestore}: Props) => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
   const [isChecked, setIsChecked] = useState<Boolean>(false);
   const [contentHeight, setContentHeight] = useState(0);
@@ -32,7 +31,7 @@ const CompletedTaskItem = ({ task, onRestore }: Props) => {
       <div className="headline">
         <div className="task-container">
           <p className="list-index-container">
-            <FilledCheckIcon style={{ width: "2.05rem", height: "2.05rem" }} />
+            <FilledCheckIcon style={{width: "2.05rem", height: "2.05rem"}} />
           </p>
           <h2 className="taskName">{task.title}</h2>
         </div>
@@ -40,7 +39,7 @@ const CompletedTaskItem = ({ task, onRestore }: Props) => {
       <div
         className="description-container"
         ref={descriptionRef}
-        style={{ height: isOpen ? `${contentHeight}px` : "0px" }}
+        style={{height: isOpen ? `${contentHeight}px` : "0px"}}
       >
         <div className="button-container">
           <div className="option-button-wrapper bg-secondary">

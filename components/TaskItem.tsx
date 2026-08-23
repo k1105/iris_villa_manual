@@ -1,10 +1,10 @@
 // components/TaskItem.tsx
-import { useEffect, useRef, useState } from "react";
-import { SkipIcon } from "./icons/SkipIcon";
-import { CheckIcon } from "./icons/CheckIcon";
+import {useEffect, useRef, useState} from "react";
+import {SkipIcon} from "./icons/SkipIcon";
+import {CheckIcon} from "./icons/CheckIcon";
 import Image from "next/image";
-import { Inter } from "next/font/google";
-const inter = Inter({ weight: "400", subsets: ["latin"] });
+import {Inter} from "next/font/google";
+const inter = Inter({weight: "400", subsets: ["latin"]});
 
 interface TaskItemProps {
   task: Task;
@@ -49,7 +49,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
       <div
         className="description-container"
         ref={descriptionRef}
-        style={{ height: isOpen ? `${contentHeight}px` : "0px" }}
+        style={{height: isOpen ? `${contentHeight}px` : "0px"}}
       >
         <div className="place-container">
           <p className="place-icon">場所</p>
@@ -93,7 +93,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               }}
               className="option-button"
             >
-              <CheckIcon style={{ fontSize: "1.5rem", marginTop: "0.75rem" }} />
+              <CheckIcon style={{fontSize: "1.5rem", marginTop: "0.75rem"}} />
               <p>完了</p>
             </div>
           </div>
@@ -112,7 +112,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         <div>
           <a
             href={`https://iris-villa.microcms.io/apis/task/${task.id}`}
-            style={{ textDecoration: "none" }}
+            style={{textDecoration: "none"}}
           >
             <p className={`micro-cms-link ${inter.className}`}>
               内容を編集する(MicroCMSへ)
